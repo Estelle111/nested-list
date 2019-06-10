@@ -1,0 +1,106 @@
+html, body, div, object,
+h1, h2, h3, h4, h5, h6, p,
+a, img, var, ul, ol, li,
+form, label, table,
+article, aside, canvas, footer, header,
+menu, nav, section, button {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+.App {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vw;
+  color: #46494F;
+}
+.container {
+  padding: 20px 40px;
+  width: 800px;
+  height: auto;
+  border: 1px solid #EBEBEB;
+}
+
+/* HEADER */
+header {
+  display: flex;
+  justify-content: space-between;
+}
+.header-title {
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  font-size: 23px;
+}
+
+
+/* SWITCH BUTTON */
+.react-switch {
+  margin-top: 10px;
+}
+.react-switch-bg {
+  background: #84BD49 !important;
+  height: 26px !important;
+}
+.react-switch-handle {
+  height: 22px !important;
+  width: 22px !important;
+}
+
+/* LIST */
+.list-block-layout {
+  margin: 5% 0;
+}
+.list-layout {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid #EBEBEB;
+  padding: 10px 0;
+}
+.list-children-layout {
+  width: 775px;
+  margin: auto;
+  background: #F6F7FA;
+}
+img {
+  width: 40px;
+  height: 40px;
+}
+
+/* BUTTONS */
+.buttons-layout {
+  display: flex;
+  flex-direction: column;
+}
+.buttons {
+  display: flex;
+  align-items: start;
+  border: 1px solid #EBEBEB;
+  padding: 10px 6px;
+  width: 70px;
+}
+
+/* FOOTER */
+footer {
+  display: flex;
+}
+.footer-title {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: 15px;
+  color: #ADD66B;
+  margin-right: 70px;
+}
+.checked {
+  border: 2px solid #ADD66B;
+  border-radius: 20px;
+  padding: 10px;
+}
