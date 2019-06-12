@@ -1,75 +1,34 @@
-import React from "react";
-import Switch from "./Switch.jsx";
+import React, { Component } from "react";
+import Switch from "./Switch";
+import { list } from "../data/data"
 
-class List extends React.Component {
+class List extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			menuOpened: null,
-			checked: true,
-			list: [
-				{
-					id			: 3,
-					img			: 'https://images.pexels.com/photos/1191639/pexels-photo-1191639.jpeg?auto=format%2Ccompress&cs=tinysrgb&dpr=2&h=750&w=1260',
-					title		: 'Dunkin Donuts - FR 1',
-					link		: 'dunkindonuts.com/summer2017%camera',
-					size		: 'Percentage: 10%',
-					opened  	: false,
-					list		: [
-						{
-							id		: 1,
-							img		: 'https://images.pexels.com/photos/1191639/pexels-photo-1191639.jpeg?auto=format%2Ccompress&cs=tinysrgb&dpr=2&h=750&w=1260',
-							title	: 'FR - IMU Dunkin Donuts',
-							link	: 'dunkindonuts.com/summer2017%camera',
-							size	: '300 x 250',
-						}, {
-							id		: 2,
-							img		: 'https://images.pexels.com/photos/1191639/pexels-photo-1191639.jpeg?auto=format%2Ccompress&cs=tinysrgb&dpr=2&h=750&w=1260',
-							title	: 'FR - Boutton Dunkin Donuts',
-							link	: 'dunkindonuts.com/summer2017%camera',
-							size	: '120 x 90',
-						}
-					]
-				},
-				{
-					id			: 4,
-					img			: 'https://images.pexels.com/photos/1191639/pexels-photo-1191639.jpeg?auto=format%2Ccompress&cs=tinysrgb&dpr=2&h=750&w=1260',
-					title		: 'Dunkin Donuts - FR 2',
-					link		: 'dunkindonuts.com/summer2017%camera',
-					size		: 'Percentage: 10%',
-					opened  	: false,
-					list		: [
-						{
-							id		: 4,
-							img		: 'https://images.pexels.com/photos/1191639/pexels-photo-1191639.jpeg?auto=format%2Ccompress&cs=tinysrgb&dpr=2&h=750&w=1260',
-							title	: 'FR - IMU Dunkin Donuts',
-							link	: 'dunkindonuts.com/summer2017%camera',
-							size	: '300 x 250',
-						}, {
-							id		: 5,
-							img		: 'https://images.pexels.com/photos/1191639/pexels-photo-1191639.jpeg?auto=format%2Ccompress&cs=tinysrgb&dpr=2&h=750&w=1260',
-							title	: 'FR - Boutton Dunkin Donuts',
-							link	: 'dunkindonuts.com/summer2017%camera',
-							size	: '120 x 90',
-						}
-					]
-				}
-			]
+			list
 		}
 	}
 
 	handleChange(checked) {
-    this.setState({ checked });
+		let banners = this.state.list
+		banners.forEach(item => {
+			item.opened = checked
+		});
+		this.setState({
+			banners: this.state.list
+		})
   }
 
 	toggleList(id) {
-		/* console.log(id) */
 		let name = id 
 		let banners = this.state.list
 		for(let i=0; i<banners.length; i++){
 			let item = banners[i]
 			if(name === item.id){
 				item.opened = !item.opened
+				break
 			}
 		}
 		this.setState({
@@ -93,9 +52,8 @@ class List extends React.Component {
 		let table = this.state.list
 		let index = table.findIndex((el) => el.id === id);
 		table.splice(index,1)
-
 		this.setState({
-			table: this.state.list
+			table
 		})
 	}
 
@@ -105,23 +63,33 @@ class List extends React.Component {
 		let item = table[index]
 		let subIndex = item.list.findIndex((el) => el.id === subItemId);
 		item.list.splice(subIndex,1) 
-
 		this.setState({
-			table: this.state.list
+			table
 		})
 	}
 
+	checkAllOpen(){
+		let allOpened = true;
+		const { list } = this.state;
+		list.forEach(item => {
+			if(!item.opened){
+				allOpened = false
+			}
+		});
+		return allOpened
+	}
+
 	render() {
+		const { menuOpened, list } = this.state
 		return (
 			<div>
 				<header>
 					<p className="header-title">companion</p>
-					<Switch checked={this.state.checked} handleChange={this.handleChange.bind(this)}/>
+					<Switch checked={this.checkAllOpen()} handleChange={this.handleChange.bind(this)}/>
 				</header>
 				<div className="list-block-layout">
-					{this.state.list.map((item, index) => {
-						return ( 
-							<div key={index}>
+					{list.map((item, index) => (
+							<div key={`item/${index}`}>
 								<div className="list-block-parent-layout">
 									<div className="list-parent-layout" >
 										{item.opened === true ?
@@ -133,41 +101,43 @@ class List extends React.Component {
 										<span className="list-item">{item.size}</span>
 									</div>
 									<div>
-										{item.id === this.state.menuOpened ?
+										{item.id === menuOpened ? (
 											<div className="menu-layout">
 												<i onClick={() => this.closeMenu()} className="cross fas fa-times"></i>
 												<button onClick={() => this.deleteItem(item.id)} className="menu-items">delete</button>
 												<button className="menu-items">edit</button>
 											</div>
-										: <button onClick={() => this.toggleMenu(item.id)}>...</button>}
+										) : (
+											<button onClick={() => this.toggleMenu(item.id)}>...</button>
+										)}
 									</div>
 								</div>
-								{item.list.map((subitem) => {
-									return (
-										<div>
-											{item.opened === true || this.state.checked === true ? 
-												<ul className="list-layout list-children-layout">
-													<img src={subitem.img} alt="dunkin donuts"/>
-													<h3>{subitem.title}</h3>
-													<span>{subitem.link}</span>
-													<span>{subitem.size}</span>
-													<div>
-														{subitem.id === this.state.menuOpened ?
-															<div className="menu-layout">
-																<i onClick={() => this.closeMenu()} className="cross fas fa-times"></i>
-																<button onClick={() => this.deleteSubItem(item.id, subitem.id)} className="menu-items">delete</button>
-																<button className="menu-items">edit</button>
-															</div>
-														: <button className="dotsButton" onClick={() => this.toggleMenu(subitem.id)}>...</button>}
-													</div>
-												</ul>
-											: " "}
-										</div>
-									)
-								})}
+								{item.list.map((subitem, index) => (
+									<div key={`subitem/${index}`}>
+										{item.opened === true && (
+											<ul className="list-layout list-children-layout">
+												<img src={subitem.img} alt="dunkin donuts"/>
+												<h3>{subitem.title}</h3>
+												<span>{subitem.link}</span>
+												<span>{subitem.size}</span>
+												<div>
+													{subitem.id === menuOpened ? (
+														<div className="menu-layout">
+															<i onClick={() => this.closeMenu()} className="cross fas fa-times"></i>
+															<button onClick={() => this.deleteSubItem(item.id, subitem.id)} className="menu-items">delete</button>
+															<button className="menu-items">edit</button>
+														</div>
+													) : (
+														<button className="dotsButton" onClick={() => this.toggleMenu(subitem.id)}>...</button>
+													)}
+												</div>
+											</ul>
+										)}
+									</div>
+								))}
 							</div> 
 						)
-					})}
+					)}
 				</div>
 			</div>
 		)
